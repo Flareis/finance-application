@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ErrorDTO } from 'src/dto/error.dto';
-import { AccountMongoRepository } from 'src/repository/account.finance.repository';
-import { AccountFinance } from 'src/schemas/account.finance.schema';
+import { ErrorDTO } from '../dto/error.dto';
+import { AccountMongoRepository } from '../repository/account.finance.repository';
+import { AccountFinance } from '../schemas/account.finance.schema';
 
 const notFound = new AccountFinance();
 notFound.error = new ErrorDTO();

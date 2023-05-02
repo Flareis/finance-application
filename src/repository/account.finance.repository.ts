@@ -1,12 +1,8 @@
-import {
-  BadRequestException,
-  ConflictException,
-  Injectable,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-import { IAccount } from 'src/schemas/interfaces/account.finance.interface';
-import { AccountFinance } from 'src/schemas/account.finance.schema';
+import { IAccount } from '../schemas/interfaces/account.finance.interface';
+import { AccountFinance } from '../schemas/account.finance.schema';
 
 @Injectable()
 export class AccountMongoRepository {

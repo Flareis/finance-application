@@ -1,8 +1,7 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { CreateAccountFinanceDto } from 'src/dto/create-account-finance.dto';
-import { ErrorDTO } from 'src/dto/error.dto';
-import { AccountFinance } from 'src/schemas/account.finance.schema';
-import { AccountFinanceService } from 'src/services/account-finance.service';
+import { CreateAccountFinanceDto } from '../dto/create-account-finance.dto';
+import { AccountFinance } from '../schemas/account.finance.schema';
+import { AccountFinanceService } from '../services/account-finance.service';
 
 @Controller('account')
 export class AccountFinanceController {

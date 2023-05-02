@@ -2,7 +2,7 @@ import { IAccount } from './interfaces/account.finance.interface';
 import { ProductsEnum } from './interfaces/enums/products.enum';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { ErrorDTO } from 'src/dto/error.dto';
+import { ErrorDTO } from '../dto/error.dto';
 
 export type AccountFinanceDocument = HydratedDocument<AccountFinance>;
 
