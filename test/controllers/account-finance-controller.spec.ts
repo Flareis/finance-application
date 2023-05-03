@@ -1,8 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import {
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { InternalServerErrorException } from '@nestjs/common';
 import { AccountFinanceController } from '../../src/controllers/account-finance.controller';
 import { AccountFinanceService } from '../../src/services/account-finance.service';
 import { CreateAccountFinanceDto } from '../../src/dto/create-account-finance.dto';
@@ -13,7 +10,7 @@ describe('AccountFinanceController', () => {
   let dtoAccountMock: CreateAccountFinanceDto;
 
   beforeEach(async () => {
-    dtoAccountMock = new CreateAccountFinanceDto()
+    dtoAccountMock = new CreateAccountFinanceDto();
     const mockSevice = {
       getOperations: jest.fn().mockReturnValue({}),
       getFindAccount: jest.fn().mockReturnValue([]),
@@ -57,7 +54,7 @@ describe('AccountFinanceController', () => {
       expect(service.findAll).toHaveBeenCalled;
     });
 
-   /*  it('should be called service whit corrects params', async () => {
+    /*  it('should be called service whit corrects params', async () => {
       const _id = '998877';
       await sut.findById(_id);
       expect(service.findById).toHaveBeenCalledWith(_id);
