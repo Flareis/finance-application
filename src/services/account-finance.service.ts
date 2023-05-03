@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ErrorDTO } from '../dto/error.dto';
 import { AccountMongoRepository } from '../repository/account.finance.repository';
 import { AccountFinance } from '../schemas/account.finance.schema';
