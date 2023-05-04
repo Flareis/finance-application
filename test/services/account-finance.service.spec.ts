@@ -1,23 +1,52 @@
-import { InternalServerErrorException } from '@nestjs/common';
+import { InternalServerErrorException, Provider } from '@nestjs/common';
 import { TestingModule, Test } from '@nestjs/testing';
+import { ProductsEnum } from '../../src/schemas/interfaces/enums/products.enum';
 import { AccountMongoRepository } from '../../src/repository/account.finance.repository';
 import { AccountFinance } from '../../src/schemas/account.finance.schema';
 import { AccountFinanceService } from '../../src/services/account-finance.service';
 import { DTOFactoryMock } from '../mock/dto-factory.mock';
 
 describe('AccountFinanceService', () => {
-  let accountMongoRepository: Pick<
+  //let dtoFactory: DTOFactoryMock;
+  let service: AccountFinanceService;
+  let accountMongoRepositoryMock: Pick<
     AccountMongoRepository,
     'createAccount' | 'findAllAccounts' | 'findByAccountId' | 'findById'
   >;
-  let dtoFactory: DTOFactoryMock;
-  let service: AccountFinanceService;
+
+  const dtoAccountFinance = {
+    account_id: 1122,
+    limit: 10000,
+    products: ProductsEnum.BROKERAGE,
+    error: { errorCode: 'dummy_error', message: 'dummy_message' },
+  };
+  const dtoAccountList: AccountFinance[] = [
+    new AccountFinance(),
+    new AccountFinance(),
+    new AccountFinance(),
+  ];
+
+  // Ambos funcionam, mas o anterior deixa mais claro o retorno.
+  /* const dtoAccountList = (): Provider<
+    Pick<AccountMongoRepository, 'createAccount'>
+  > => ({
+    provide: AccountMongoRepository,
+    useValue: {
+      createAccount: jest
+        .fn()
+        .mockReturnValue([
+          dtoFactory.createAccountFinanceDto(),
+          dtoFactory.createAccountFinanceDto(),
+          dtoFactory.createAccountFinanceDto(),
+        ]),
+    },
+  }); */
 
   beforeEach(async () => {
-    dtoFactory = new DTOFactoryMock();
-    accountMongoRepository = {
+    //dtoFactory = new DTOFactoryMock();
+    accountMongoRepositoryMock = {
       createAccount: jest.fn().mockReturnValue({}),
-      findAllAccounts: jest.fn().mockReturnValue([dtoFactory]),
+      findAllAccounts: jest.fn().mockResolvedValue(dtoAccountList),
       findByAccountId: jest.fn().mockReturnValue({}),
       findById: jest.fn().mockReturnValue({}),
     };
@@ -25,17 +54,21 @@ describe('AccountFinanceService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AccountFinanceService,
-        { provide: AccountMongoRepository, useValue: accountMongoRepository },
+        {
+          provide: AccountMongoRepository,
+          useValue: accountMongoRepositoryMock,
+        },
       ],
     }).compile();
     service = module.get<AccountFinanceService>(AccountFinanceService);
-    accountMongoRepository.createAccount = jest
-      .fn()
-      .mockImplementationOnce(async () => new AccountFinance());
+    accountMongoRepositoryMock = module.get<AccountMongoRepository>(
+      AccountMongoRepository,
+    );
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+    expect(accountMongoRepositoryMock).toBeDefined();
   });
 
   describe('createAccount', () => {
@@ -47,44 +80,60 @@ describe('AccountFinanceService', () => {
       const serviceSpy = jest
         .spyOn(service, 'createAccount')
         .mockImplementationOnce(async () => null);
-      service.createAccount;
+      service.createAccount(new AccountFinance());
       expect(serviceSpy).toHaveBeenCalled;
     });
 
     it('should be throw if repository throw', async () => {
-      accountMongoRepository.createAccount = jest
+      accountMongoRepositoryMock.createAccount = jest
         .fn()
         .mockReturnValueOnce(new InternalServerErrorException());
       await expect(service.createAccount).rejects.toThrow();
     });
 
     it('should be return when correct param', async () => {
-      expect(service.createAccount).toBeTruthy();
+      /*  accountMongoRepositoryMock.createAccount = jest
+        .fn()
+        .mockResolvedValueOnce(dtoFactory); */
+      accountMongoRepositoryMock.findByAccountId = jest
+        .fn()
+        .mockResolvedValueOnce(null);
+      const account = new AccountFinance();
+      account.account_id = 1122;
+      const create = await service.createAccount(account);
+      expect(create.account_id).toBe(1122);
+      expect(create.limit).toBe(10000);
+      expect(create.products).toBe(ProductsEnum.BROKERAGE.toString());
+    });
+
+    it('should be return error when account_id is null', async () => {
+      accountMongoRepositoryMock.findByAccountId = jest
+        .fn()
+        .mockResolvedValueOnce(dtoAccountFinance);
+      const account = new AccountFinance();
+      account.account_id = 1122;
+      const create = await service.createAccount(account);
+
+      expect(create.error.errorCode).toBe('Status Code = 03');
+      expect(create.error.message).toBe(`Account whit 1122 already created.`);
     });
   });
 
   describe('findAllAccounts', () => {
-    it('should be throw if correct param is not provided', async () => {
-      await expect(service.findAll).rejects.toThrow();
+    it('should reurn a account list successfully', async () => {
+      const result = await service.findAll();
+      expect(result).toEqual(dtoAccountList);
+      expect(accountMongoRepositoryMock.findAllAccounts).toHaveBeenCalledTimes(
+        1,
+      );
     });
 
-    it('should be called service with correct params', async () => {
-      const serviceSpy = jest
-        .spyOn(service, 'findAll')
-        .mockImplementationOnce(async () => null);
-      service.findAll;
-      expect(serviceSpy).toHaveBeenCalled;
-    });
+    it('should throw an exception', () => {
+      jest
+        .spyOn(accountMongoRepositoryMock, 'findAllAccounts')
+        .mockRejectedValueOnce(new Error());
 
-    it('should be throw if repository throw', async () => {
-      accountMongoRepository.findAllAccounts = jest
-        .fn()
-        .mockReturnValueOnce(new InternalServerErrorException());
-      await expect(service.findAll).rejects.toThrow();
-    });
-
-    it('should be return when correct param', async () => {
-      expect(service.findAll).toBeTruthy();
+      expect(service.findAll()).rejects.toThrowError();
     });
   });
 
@@ -103,7 +152,7 @@ describe('AccountFinanceService', () => {
     });
 
     it('should be throw if repository throw', async () => {
-      accountMongoRepository.findByAccountId = jest
+      accountMongoRepositoryMock.findByAccountId = jest
         .fn()
         .mockReturnValueOnce(new InternalServerErrorException());
       await expect(service.findByAccountId).rejects.toThrow();
@@ -129,7 +178,7 @@ describe('AccountFinanceService', () => {
     });
 
     it('should be throw if repository throw', async () => {
-      accountMongoRepository.findById = jest
+      accountMongoRepositoryMock.findById = jest
         .fn()
         .mockReturnValueOnce(new InternalServerErrorException());
       await expect(service.findById).rejects.toThrow();
@@ -137,6 +186,11 @@ describe('AccountFinanceService', () => {
 
     it('should be return when correct param', async () => {
       expect(service.findById(_id)).toBeTruthy();
+    });
+
+    it('should be return error when _id not found', async () => {
+      accountMongoRepositoryMock.findById = jest.fn().mockReturnValueOnce(null);
+      expect(service.findById(null)).toBeTruthy();
     });
   });
 });
