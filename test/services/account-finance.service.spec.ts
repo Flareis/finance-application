@@ -4,10 +4,8 @@ import { ProductsEnum } from '../../src/schemas/interfaces/enums/products.enum';
 import { AccountMongoRepository } from '../../src/repository/account.finance.repository';
 import { AccountFinance } from '../../src/schemas/account.finance.schema';
 import { AccountFinanceService } from '../../src/services/account-finance.service';
-import { DTOFactoryMock } from '../mock/dto-factory.mock';
 
 describe('AccountFinanceService', () => {
-  //let dtoFactory: DTOFactoryMock;
   let service: AccountFinanceService;
   let accountMongoRepositoryMock: Pick<
     AccountMongoRepository,
@@ -26,24 +24,7 @@ describe('AccountFinanceService', () => {
     new AccountFinance(),
   ];
 
-  // Ambos funcionam, mas o anterior deixa mais claro o retorno.
-  /* const dtoAccountList = (): Provider<
-    Pick<AccountMongoRepository, 'createAccount'>
-  > => ({
-    provide: AccountMongoRepository,
-    useValue: {
-      createAccount: jest
-        .fn()
-        .mockReturnValue([
-          dtoFactory.createAccountFinanceDto(),
-          dtoFactory.createAccountFinanceDto(),
-          dtoFactory.createAccountFinanceDto(),
-        ]),
-    },
-  }); */
-
   beforeEach(async () => {
-    //dtoFactory = new DTOFactoryMock();
     accountMongoRepositoryMock = {
       createAccount: jest.fn().mockReturnValue({}),
       findAllAccounts: jest.fn().mockResolvedValue(dtoAccountList),
@@ -92,9 +73,9 @@ describe('AccountFinanceService', () => {
     });
 
     it('should be return when correct param', async () => {
-      /*  accountMongoRepositoryMock.createAccount = jest
+      accountMongoRepositoryMock.createAccount = jest
         .fn()
-        .mockResolvedValueOnce(dtoFactory); */
+        .mockResolvedValueOnce(dtoAccountFinance);
       accountMongoRepositoryMock.findByAccountId = jest
         .fn()
         .mockResolvedValueOnce(null);
