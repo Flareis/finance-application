@@ -13,6 +13,18 @@ export class DTOFactoryMock {
     return data;
   }
 
+  createsAccountFinanceDto(): IAccount[] {
+    const data: IAccount[] = [
+      {
+        account_id: 552288,
+        limit: 10000,
+        products: [ProductsEnum.BROKERAGE],
+        /* error: this.createErrorDto(), */
+      },
+    ];
+    return data;
+  }
+
   createErrorDto(): IError {
     const data: IError = {
       errorCode: 'dummy_error',
