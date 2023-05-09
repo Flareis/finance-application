@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import mongoose from 'mongoose';
+import { Model } from 'mongoose';
 import { IAccount } from '../schemas/interfaces/account.finance.interface';
 import { AccountFinance } from '../schemas/account.finance.schema';
 
@@ -8,7 +8,7 @@ import { AccountFinance } from '../schemas/account.finance.schema';
 export class AccountMongoRepository {
   constructor(
     @InjectModel(AccountFinance.name, 'Accounts')
-    private readonly accountFinanceModel: mongoose.Model<AccountFinance>,
+    private readonly accountFinanceModel: Model<AccountFinance>,
   ) {}
 
   async createAccount(account: IAccount): Promise<AccountFinance> {
