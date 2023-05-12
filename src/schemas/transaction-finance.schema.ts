@@ -1,7 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { HydratedDocument } from 'mongoose';
 import { ITransactionFinance } from './interfaces/transaction-finance.interface';
 import { ITransactions } from './interfaces/transactions.interface';
 
+export type TransactionFinanceDocument = HydratedDocument<TransactionFinance>;
 @Schema({
   collection: 'Transactions',
 })
@@ -19,7 +21,7 @@ export class TransactionFinance implements ITransactionFinance {
   bucket_end_date: Date;
 
   @Prop()
-  transactions: ITransactions;
+  transactions: ITransactions[];
 }
 
 export const TransactionFinanceShema =
