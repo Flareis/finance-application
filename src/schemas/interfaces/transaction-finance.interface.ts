@@ -5,5 +5,5 @@ export interface ITransactionFinance {
   transaction_count: number;
   bucket_start_date: Date;
   bucket_end_date: Date;
-  transactions: ITransactions;
+  transactions: ITransactions[];
 }
