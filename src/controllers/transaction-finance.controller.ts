@@ -10,7 +10,7 @@ export class TransactionFinanceController {
     private readonly transactionFinanceService: TransactionFinanceService,
   ) {}
 
-  /* @Post()
+  @Post()
   async createTransaction(
     @Body() data: CreateTransactionFinanceDto,
   ): Promise<TransactionFinance> {
@@ -21,7 +21,7 @@ export class TransactionFinanceController {
   async findById(@Param('_id') _id: string): Promise<TransactionFinance> {
     const transaction = this.transactionFinanceService.findById(_id);
     return transaction;
-  } */
+  }
 
   @Get('/findAccountId/:account_id')
   async findByAccountId(
