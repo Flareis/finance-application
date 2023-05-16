@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+import { ErrorDTO } from 'src/dto/error.dto';
 import { ITransactionFinance } from './interfaces/transaction-finance.interface';
 import { ITransactions } from './interfaces/transactions.interface';
 
@@ -22,6 +23,9 @@ export class TransactionFinance implements ITransactionFinance {
 
   @Prop()
   transactions: ITransactions[];
+
+  @Prop()
+  error: ErrorDTO;
 }
 
 export const TransactionFinanceShema =

@@ -1,5 +1,6 @@
 import { ITransactionFinance } from 'src/schemas/interfaces/transaction-finance.interface';
 import { ITransactions } from 'src/schemas/interfaces/transactions.interface';
+import { ErrorDTO } from './error.dto';
 
 export class CreateTransactionFinanceDto implements ITransactionFinance {
   readonly account_id: number;
@@ -7,4 +8,5 @@ export class CreateTransactionFinanceDto implements ITransactionFinance {
   readonly bucket_start_date: Date;
   readonly bucket_end_date: Date;
   readonly transactions: ITransactions[];
+  readonly error: ErrorDTO;
 }
