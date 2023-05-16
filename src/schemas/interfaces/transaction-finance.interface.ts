@@ -1,3 +1,4 @@
+import { IError } from './error.interface';
 import { ITransactions } from './transactions.interface';
 
 export interface ITransactionFinance {
@@ -6,4 +7,5 @@ export interface ITransactionFinance {
   bucket_start_date: Date;
   bucket_end_date: Date;
   transactions: ITransactions[];
+  error?: IError;
 }
