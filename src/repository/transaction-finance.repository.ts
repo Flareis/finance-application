@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { TransactionFinance } from '../schemas/transaction-finance.schema';
 import { ITransactionFinance } from 'src/schemas/interfaces/transaction-finance.interface';
+import { ITransactions } from 'src/schemas/interfaces/transactions.interface';
 
 @Injectable()
 export class TransactionMongoRepository {
@@ -15,6 +16,15 @@ export class TransactionMongoRepository {
     transaction: ITransactionFinance,
   ): Promise<TransactionFinance> {
     return this.transactionFinanceModel.create(transaction);
+  }
+
+  async updateTransactions(
+    account_id: number,
+    transactions: ITransactions[],
+  ): Promise<void> {
+    await this.transactionFinanceModel
+      .updateOne({ account_id: account_id }, { $set: transactions })
+      .exec();
   }
 
   async findAllTransactions(): Promise<TransactionFinance[]> {

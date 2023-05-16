@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { ErrorDTO } from 'src/dto/error.dto';
+import { ITransactions } from 'src/schemas/interfaces/transactions.interface';
 import { TransactionMongoRepository } from '../repository/transaction-finance.repository';
 import { TransactionFinance } from '../schemas/transaction-finance.schema';
 
+const notFound = new TransactionFinance();
+notFound.error = new ErrorDTO();
 @Injectable()
 export class TransactionFinanceService {
   constructor(
@@ -11,7 +15,28 @@ export class TransactionFinanceService {
   async createTransaction(
     transaction: TransactionFinance,
   ): Promise<TransactionFinance> {
-    await this.transactionMongoRepository.createTransaction(transaction);
+    const findTransaction = await this.findByAccountId(transaction.account_id);
+
+    if (findTransaction === null) {
+      return await this.transactionMongoRepository.createTransaction(
+        transaction,
+      );
+    } else {
+      notFound.error.errorCode = 'Status Code = 03';
+      notFound.error.message = `Account whit ${transaction.account_id} already created.`;
+      return notFound;
+    }
+  }
+
+  async updateTransactions(
+    account_id: number,
+    transactions: ITransactions[],
+  ): Promise<void> {
+    const transaction =
+      await this.transactionMongoRepository.updateTransactions(
+        account_id,
+        transactions,
+      );
     return transaction;
   }
 
