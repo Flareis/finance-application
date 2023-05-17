@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { CreateTransactionFinanceDto } from 'src/dto/create-transaction-finance.dto';
 import { ErrorDTO } from 'src/dto/error.dto';
-import { ITransactions } from 'src/schemas/interfaces/transactions.interface';
 import { TransactionMongoRepository } from '../repository/transaction-finance.repository';
 import { TransactionFinance } from '../schemas/transaction-finance.schema';
 
@@ -28,16 +28,32 @@ export class TransactionFinanceService {
     }
   }
 
-  async updateTransactions(
+  async includeTransactions(
     account_id: number,
-    transactions: ITransactions[],
+    transactionsDto: CreateTransactionFinanceDto,
   ): Promise<void> {
-    const transaction =
-      await this.transactionMongoRepository.updateTransactions(
+    const transaction = this.findByAccountId(account_id);
+    (await transaction).transaction_count = transactionsDto.transaction_count;
+    (await transaction).transactions = transactionsDto.transactions;
+    const transactions =
+      await this.transactionMongoRepository.includeTransactions(
         account_id,
-        transactions,
+        await transaction,
       );
-    return transaction;
+    return transactions;
+
+    /* const transaction = this.findByAccountId(account_id);
+    (await transaction).transaction_count = transactionsDto.transaction_count;
+    (await transaction).transactions = transactionsDto.transactions;
+
+    if (transaction === null) {
+      return await this.transactionMongoRepository.includeTransactions(
+        account_id,
+        await transaction,
+      );
+    } else {
+      throw new BadRequestException(`Account with ${account_id} not found.`);
+    } */
   }
 
   async findByAccountId(account_id: number): Promise<TransactionFinance> {
