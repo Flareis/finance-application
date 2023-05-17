@@ -1,9 +1,7 @@
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
-
-import { CreateTransactionFinanceDto } from '../dto/creat-transaction-finance.dto';
 import { TransactionFinanceService } from '../services/transaction-finance.service';
 import { TransactionFinance } from '../schemas/transaction-finance.schema';
-import { ITransactions } from 'src/schemas/interfaces/transactions.interface';
+import { CreateTransactionFinanceDto } from 'src/dto/create-transaction-finance.dto';
 
 @Controller('transaction')
 export class TransactionFinanceController {
@@ -20,9 +18,9 @@ export class TransactionFinanceController {
   @Patch(':account_id')
   async includeTransaction(
     @Param('account_id') account_id: number,
-    @Body() data: ITransactions[],
+    @Body() data: CreateTransactionFinanceDto,
   ): Promise<void> {
-    return this.transactionFinanceService.updateTransactions(account_id, data);
+    return this.transactionFinanceService.includeTransactions(account_id, data);
   }
 
   @Get(':_id')
