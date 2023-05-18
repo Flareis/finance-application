@@ -8,4 +8,5 @@ export enum SymbolEnum {
   GOOG = 'goog',
   INTC = 'intc',
   NVDA = 'nvda',
+  ZINGA = 'zinga',
 }
