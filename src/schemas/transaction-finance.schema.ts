@@ -25,7 +25,7 @@ export class TransactionFinance implements ITransactionFinance {
   transactions: ITransactions[];
 
   @Prop()
-  error: ErrorDTO;
+  error?: ErrorDTO;
 }
 
 export const TransactionFinanceShema =
