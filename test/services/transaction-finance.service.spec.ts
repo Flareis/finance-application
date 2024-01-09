@@ -4,6 +4,7 @@ import { ProductsEnum } from '../../src/schemas/interfaces/enums/products.enum';
 import { TransactionMongoRepository } from '../../src/repository/transaction-finance.repository';
 import { TransactionFinance } from '../../src/schemas/transaction-finance.schema';
 import { TransactionFinanceService } from '../../src/services/transaction-finance.service';
+import { CreateTransactionFinanceDto } from '../../src/dto/create-transaction-finance.dto';
 
 describe('TransactionFinanceService', () => {
   let service: TransactionFinanceService;
@@ -33,7 +34,7 @@ describe('TransactionFinanceService', () => {
   beforeEach(async () => {
     transactionMongoRepositoryMock = {
       createTransaction: jest.fn().mockReturnValue({}),
-      includeTransactions: jest.fn().mockReturnValue({}),
+      includeTransactions: jest.fn().mockReturnValue(dtoTransactionFinance),
       findAllTransactions: jest.fn().mockResolvedValue(dtoTransactionList),
       findByAccountId: jest.fn().mockReturnValue({}),
       findById: jest.fn().mockReturnValue({}),
@@ -107,7 +108,7 @@ describe('TransactionFinanceService', () => {
   });
 
   describe('findAllAccounts', () => {
-    it('should reurn a account list successfully', async () => {
+    it('should return a account list successfully', async () => {
       const result = await service.findAll();
       expect(result).toEqual(dtoTransactionList);
       expect(
@@ -121,6 +122,26 @@ describe('TransactionFinanceService', () => {
         .mockRejectedValueOnce(new Error());
 
       expect(service.findAll()).rejects.toThrowError();
+    });
+  });
+
+  describe('includeTransaction', () => {
+    it('should include a transaction with correct params', async () => {
+      const serviceSpy = jest
+        .spyOn(service, 'includeTransactions')
+        .mockImplementation(async () => null);
+      const account_id = 1122;
+      const data = dtoTransactionFinance;
+      const transactions =
+        await transactionMongoRepositoryMock.includeTransactions(
+          account_id,
+          data,
+        );
+      await service.includeTransactions(account_id, data);
+      expect(serviceSpy).toHaveBeenCalledWith(account_id, data);
+      expect(service.includeTransactions(account_id, data)).toBeTruthy();
+      expect(serviceSpy).toBeCalledTimes(2);
+      //expect(service.includeTransactions(account_id, data)).toBe(transactions);
     });
   });
 
