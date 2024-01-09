@@ -8,5 +8,5 @@ export class CreateTransactionFinanceDto implements ITransactionFinance {
   readonly bucket_start_date: Date;
   readonly bucket_end_date: Date;
   readonly transactions: ITransactions[];
-  readonly error: ErrorDTO;
+  readonly error?: ErrorDTO;
 }

@@ -1,4 +1,4 @@
-import { IError } from 'src/schemas/interfaces/error.interface';
+import { IError } from '../../src/schemas/interfaces/error.interface';
 
 export class ErrorDTO implements IError {
   errorCode: string;
