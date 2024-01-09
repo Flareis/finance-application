@@ -9,7 +9,7 @@ import { TransactionFinance } from '../../src/schemas/transaction-finance.schema
 describe('TransactionMongoRepository', () => {
   const mock = new DTOFactoryMock();
   const mockTransactionMongooseModel = (): Provider<
-    Pick<Model<TransactionFinance>, 'create' | 'find' | 'findOne'>
+    Pick<Model<TransactionFinance>, 'create' | 'find' | 'findOne' | 'updateOne'>
   > => ({
     provide: getModelToken(TransactionFinance.name, 'Transactions'),
     useValue: {
@@ -21,6 +21,9 @@ describe('TransactionMongoRepository', () => {
       }),
       findOne: jest.fn().mockReturnValue({
         exec: jest.fn().mockReturnValue(new TransactionFinance()),
+      }),
+      updateOne: jest.fn().mockReturnValue({
+        exec: jest.fn().mockReturnValue(Promise.resolve()),
       }),
     },
   });
@@ -73,5 +76,16 @@ describe('TransactionMongoRepository', () => {
       exec: jest.fn().mockReturnValue(Promise.reject(new Error())),
     });
     expect(repository.findById('5ca4bbc7a3dd9')).rejects.toThrow(new Error());
+  });
+
+  it('shoud be include a transaction with correct params', async () => {
+    const account_id = 552288;
+    const data = mock.createTransactionFinanceDto();
+    await repository.includeTransactions(account_id, data);
+    expect(TransactionFinancenModel.updateOne).toBeCalledTimes(1);
+    expect(TransactionFinancenModel.updateOne).toBeCalledWith(
+      { account_id: data.account_id },
+      { $set: data },
+    );
   });
 });
