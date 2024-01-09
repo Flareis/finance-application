@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { TransactionFinanceService } from '../services/transaction-finance.service';
 import { TransactionFinance } from '../schemas/transaction-finance.schema';
-import { CreateTransactionFinanceDto } from '../../src/dto/create-transaction-finance.dto';
+import { CreateTransactionFinanceDto } from 'src/dto/create-transaction-finance.dto';
 
 @Controller('transaction')
 export class TransactionFinanceController {

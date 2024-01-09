@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTransactionFinanceDto } from 'src/dto/create-transaction-finance.dto';
-import { ErrorDTO } from '../../src/dto/error.dto';
+import { ErrorDTO } from 'src/dto/error.dto';
 import { TransactionMongoRepository } from '../repository/transaction-finance.repository';
 import { TransactionFinance } from '../schemas/transaction-finance.schema';
 
