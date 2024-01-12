@@ -8,5 +8,5 @@ export interface ICustomersFinance {
   birthdate: Date;
   email: string;
   accounts: number[];
-  tierAndDetails: ITierAndDetails;
+  //tierAndDetails: ITierAndDetails[];
 }

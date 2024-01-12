@@ -30,8 +30,8 @@ export class CustomersFinance implements ICustomersFinance {
   @Prop()
   accounts: number[];
 
-  @Prop()
-  tierAndDetails: ITierAndDetails;
+  /* @Prop()
+  tierAndDetails: ITierAndDetails[] */;
 }
 
 export const CustomersFinanceSchema =
