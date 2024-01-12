@@ -22,6 +22,10 @@ import { TransactionFinanceService } from './services/transaction-finance.servic
       'Accounts',
     ),
     MongooseModule.forFeature(
+      [{ name: CustomersFinance.name, schema: CustomersFinanceSchema }],
+      'Customers',
+    ),
+    MongooseModule.forFeature(
       [{ name: TransactionFinance.name, schema: TransactionFinanceShema }],
       'Transactions',
     ),

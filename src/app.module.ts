@@ -8,6 +8,9 @@ import { FinanceModule } from './finance.module';
       connectionName: 'Accounts',
     }),
     MongooseModule.forRoot('mongodb://localhost:27017/Analytics', {
+      connectionName: 'Customers',
+    }),
+    MongooseModule.forRoot('mongodb://localhost:27017/Analytics', {
       connectionName: 'Transactions',
     }),
     FinanceModule,
