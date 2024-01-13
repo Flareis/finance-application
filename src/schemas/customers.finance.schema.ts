@@ -10,9 +10,6 @@ export type CustomersFinanceDocument = HydratedDocument<CustomersFinance>;
 })
 export class CustomersFinance implements ICustomersFinance {
   @Prop()
-  id: number;
-
-  @Prop()
   username: string;
 
   @Prop()
@@ -30,8 +27,8 @@ export class CustomersFinance implements ICustomersFinance {
   @Prop()
   accounts: number[];
 
-  /* @Prop()
-  tierAndDetails: ITierAndDetails[] */;
+  @Prop({ type: Object })
+  tier_and_details?: ITierAndDetails;
 }
 
 export const CustomersFinanceSchema =
