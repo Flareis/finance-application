@@ -14,4 +14,8 @@ export class CustomersMongoRepository {
     const customer = await this.customersFinanceModel.findOne({ _id }).exec();
     return customer;
   }
+
+  async createCustomer(customer: CustomersFinance): Promise<CustomersFinance> {
+    return this.customersFinanceModel.create(customer);
+  }
 }

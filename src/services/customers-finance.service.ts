@@ -12,4 +12,11 @@ export class CustomersFinanceService {
     const customer = await this.customersMongoRepository.findById(_id);
     return customer;
   }
+
+  async createCustomer(customer: CustomersFinance): Promise<CustomersFinance> {
+    const newCustomer = await this.customersMongoRepository.createCustomer(
+      customer,
+    );
+    return newCustomer;
+  }
 }
