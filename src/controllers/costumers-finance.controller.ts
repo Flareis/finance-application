@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { CreateCustomersFinanceDTO } from 'src/dto/create-customers-finance.dto';
 import { CustomersFinance } from '../schemas/customers.finance.schema';
 import { CustomersFinanceService } from '../services/customers-finance.service';
@@ -15,10 +15,22 @@ export class CustomersFinanceController {
     return customer;
   }
 
+  @Get()
+  async findAllCustomers(): Promise<CustomersFinance[]> {
+    return this.customersFinanceService.findAll()
+  }
+
   @Post()
   async createCustomer(
     @Body() data: CreateCustomersFinanceDTO,
   ): Promise<CustomersFinance>{
     return this.customersFinanceService.createCustomer(data);
   }
+
+  @Patch(':_id')
+  async updateCustomer(
+    @Param('_id') _id: string,
+    @Body() data: CreateCustomersFinanceDTO,
+    ): Promise<void> {
+      return this.customersFinanceService.updateCustomer(_id, data)}
 }

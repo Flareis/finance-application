@@ -9,7 +9,7 @@ export type CustomersFinanceDocument = HydratedDocument<CustomersFinance>;
   collection: 'Customers',
 })
 export class CustomersFinance implements ICustomersFinance {
-  @Prop()
+  @Prop({ required: true })
   username: string;
 
   @Prop()
