@@ -1,7 +1,7 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import mongoose from 'mongoose';
 import { CreateCustomersFinanceDTO } from 'src/dto/create-customers-finance.dto';
-import { ErrorException, idDontExist } from 'src/exceptions/errors.exception';
+import { idDontExist } from 'src/exceptions/errors.exception';
 import { CustomersFinance } from '../schemas/customers.finance.schema';
 import { CustomersFinanceService } from '../services/customers-finance.service';
 
@@ -18,7 +18,6 @@ export class CustomersFinanceController {
     } else {
       throw new idDontExist()
     }
-    
   }
 
   @Get()
