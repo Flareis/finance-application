@@ -1,5 +1,7 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Patch, Post } from '@nestjs/common';
+import mongoose from 'mongoose';
 import { CreateCustomersFinanceDTO } from 'src/dto/create-customers-finance.dto';
+import { ErrorException, idDontExist } from 'src/exceptions/errors.exception';
 import { CustomersFinance } from '../schemas/customers.finance.schema';
 import { CustomersFinanceService } from '../services/customers-finance.service';
 
@@ -11,8 +13,12 @@ export class CustomersFinanceController {
 
   @Get(':_id')
   async findById(@Param('_id') _id: string): Promise<CustomersFinance> {
-    const customer = this.customersFinanceService.findById(_id);
-    return customer;
+    if( mongoose.isObjectIdOrHexString(_id)){
+      return this.customersFinanceService.findById(_id);
+    } else {
+      throw new idDontExist()
+    }
+    
   }
 
   @Get()
@@ -32,5 +38,10 @@ export class CustomersFinanceController {
     @Param('_id') _id: string,
     @Body() data: CreateCustomersFinanceDTO,
     ): Promise<void> {
-      return this.customersFinanceService.updateCustomer(_id, data)}
+    if( mongoose.isObjectIdOrHexString(_id)){
+      return this.customersFinanceService.updateCustomer(_id, data)
+    } else {
+      throw new idDontExist()
+    }
+  }
 }
