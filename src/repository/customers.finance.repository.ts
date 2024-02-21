@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ErrorException, ErrorsException } from 'src/exceptions/errors.exception';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateCustomersFinanceDTO } from 'src/dto/create-customers-finance.dto';
@@ -12,7 +13,17 @@ export class CustomersMongoRepository {
   ) {}
 
   async findById(_id: string): Promise<CustomersFinance> {
+    const customer = await this.customersFinanceModel.findOne({ _id }).exec();
+    if(!customer) {
+      throw new ErrorException() 
+    } else {
+      return customer
+    }
+
+   /* try {
     return await this.customersFinanceModel.findOne({ _id }).exec();
+  } catch (error) {
+    throw new ErrorException()}  */
   }
 
   async findAllCustomers(): Promise<CustomersFinance[]> {
