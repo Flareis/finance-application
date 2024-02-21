@@ -13,17 +13,7 @@ export class CustomersMongoRepository {
   ) {}
 
   async findById(_id: string): Promise<CustomersFinance> {
-    const customer = await this.customersFinanceModel.findOne({ _id }).exec();
-    if(!customer) {
-      throw new ErrorException() 
-    } else {
-      return customer
-    }
-
-   /* try {
     return await this.customersFinanceModel.findOne({ _id }).exec();
-  } catch (error) {
-    throw new ErrorException()}  */
   }
 
   async findAllCustomers(): Promise<CustomersFinance[]> {
