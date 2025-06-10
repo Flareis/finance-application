@@ -1,9 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AccountsComponent } from './accounts/accounts.component';
+import { AccountListComponent } from './accounts/account-list/account-list.component';
+import { TransactionListComponent } from './transaction/transaction-list/transaction-list.component';
 
-const routes: Routes = [
-  { path: 'accounts', component: AccountsComponent },
+export const routes: Routes = [
+  { path: 'accounts', component: AccountListComponent },
+  { path: 'transactions', component: TransactionListComponent },
+  { path: '', redirectTo: 'accounts', pathMatch: 'full' }
 ];
 
 @NgModule({
