@@ -22,12 +22,19 @@ Aplicação backend para controle financeiro, construída com Node.js, TypeScrip
 
 ## 🗂️ Estrutura do projeto
 src/
+
 ├── controllers
+
 ├── routes
+
 ├── services
+
 ├── prisma
+
 ├── middlewares
+
 ├── utils
+
 └── index.ts
 
 ## 🛠️ Como rodar o projeto
